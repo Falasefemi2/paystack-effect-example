@@ -1,4 +1,4 @@
-import { PaystackHttpClient, Transaction } from "@pharlase/paystack-effect"
+import { PaystackHttpClient, Transaction, Customer, Plan, Subscription } from "@pharlase/paystack-effect"
 import { Config, Layer } from "effect"
 
 const PaystackConfigLive = PaystackHttpClient.layerConfig({
@@ -7,4 +7,7 @@ const PaystackConfigLive = PaystackHttpClient.layerConfig({
 
 export const PaystackClientLive = PaystackHttpClient.layer.pipe(Layer.provide(PaystackConfigLive))
 
-export const PaystackLayer = Layer.mergeAll(Transaction.layer).pipe(Layer.provide(PaystackClientLive))
+// Add a resource's `.layer` here whenever a new feature needs it.
+export const PaystackLayer = Layer.mergeAll(Transaction.layer, Customer.layer, Plan.layer, Subscription.layer).pipe(
+  Layer.provide(PaystackClientLive),
+)
